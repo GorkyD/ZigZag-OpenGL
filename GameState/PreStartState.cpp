@@ -9,13 +9,14 @@
 #include "GameState/PlayingState.h"
 #include "Input/InputSystem.h"
 #include "Services/HudService.h"
+#include "Systems/AutoMoveSystem.h"
 #include "Systems/CameraFollowSystem.h"
 #include "Systems/ShadowSystem.h"
 
 PreStartState::PreStartState(GameStateMachine& stateMachine, HudService& hudService, BallMovementSystem& ballMovementSystem, TileSpawnSystem& tileSpawnSystem, CrystalSpawnSystem& crystalSpawnSystem, ParticleBurstSystem& particleBurstSystem,
-                             ShadowSystem& shadowSystem, CameraFollowSystem& cameraFollowSystem, ScoreSystem& scoreSystem)
+                             ShadowSystem& shadowSystem, CameraFollowSystem& cameraFollowSystem, ScoreSystem& scoreSystem, AutoMoveSystem& autoMoveSystem)
     : stateMachine(stateMachine), hudService(hudService), ballMovementSystem(ballMovementSystem), tileSpawnSystem(tileSpawnSystem), crystalSpawnSystem(crystalSpawnSystem), particleBurstSystem(particleBurstSystem),
-      shadowSystem(shadowSystem), cameraFollowSystem(cameraFollowSystem), scoreSystem(scoreSystem)
+      shadowSystem(shadowSystem), cameraFollowSystem(cameraFollowSystem), scoreSystem(scoreSystem), autoMoveSystem(autoMoveSystem)
 {
 }
 
@@ -24,6 +25,7 @@ void PreStartState::OnEnter(ZigZagContext& context)
     hudService.ShowStartHint(context);
     bounceTime = 0.0f;
     spaceWasPressed = false;
+    rWasPressed = false;
 }
 
 void PreStartState::OnUpdate(ZigZagContext& context, float deltaTime)
@@ -42,9 +44,16 @@ void PreStartState::OnUpdate(ZigZagContext& context, float deltaTime)
     const bool spacePressedThisFrame = spacePressed && !spaceWasPressed;
     spaceWasPressed = spacePressed;
 
-    if (spacePressedThisFrame)
+    const bool rPressed = context.engine->GetInputSystem()->IsKeyDown(Key::R);
+    const bool rPressedThisFrame = rPressed && !rWasPressed;
+    rWasPressed = rPressed;
+
+    if (spacePressedThisFrame || rPressedThisFrame)
     {
+        if (rPressedThisFrame)
+            autoMoveSystem.Enable(context);
+
         hudService.ShowPlayingHint(context);
-        stateMachine.ChangeState(context, std::make_unique<PlayingState>(stateMachine, ballMovementSystem, tileSpawnSystem, crystalSpawnSystem, particleBurstSystem, shadowSystem, cameraFollowSystem, scoreSystem, hudService));
+        stateMachine.ChangeState(context, std::make_unique<PlayingState>(stateMachine, ballMovementSystem, tileSpawnSystem, crystalSpawnSystem, particleBurstSystem, shadowSystem, cameraFollowSystem, scoreSystem, hudService, autoMoveSystem));
     }
 }

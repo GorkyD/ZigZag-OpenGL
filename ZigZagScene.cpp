@@ -22,6 +22,7 @@ void ZigZagScene::SetupGame(Engine& engine)
 {
     environmentService.Init(context);
     ballMovementSystem.Init(context);
+    autoMoveSystem.Init(context);
     crystalSpawnSystem.Init(context);
     tileSpawnSystem.Init(context);
     particleBurstSystem.Init(context);
@@ -30,7 +31,7 @@ void ZigZagScene::SetupGame(Engine& engine)
     scoreSystem.Init(context);
     hudService.Init(context);
 
-    stateMachine.ChangeState(context, std::make_unique<PreStartState>(stateMachine, hudService, ballMovementSystem, tileSpawnSystem, crystalSpawnSystem, particleBurstSystem, shadowSystem, cameraFollowSystem, scoreSystem));
+    stateMachine.ChangeState(context, std::make_unique<PreStartState>(stateMachine, hudService, ballMovementSystem, tileSpawnSystem, crystalSpawnSystem, particleBurstSystem, shadowSystem, cameraFollowSystem, scoreSystem, autoMoveSystem));
 }
 
 void ZigZagScene::OnUpdate(Engine& engine, float deltaTime)

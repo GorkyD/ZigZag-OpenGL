@@ -5,6 +5,7 @@
 #include "Scene/IScene.h"
 #include "Services/EnvironmentService.h"
 #include "Services/HudService.h"
+#include "Systems/AutoMoveSystem.h"
 #include "Systems/BallMovementSystem.h"
 #include "Systems/CameraFollowSystem.h"
 #include "Systems/CrystalSpawnSystem.h"
@@ -37,6 +38,7 @@ private:
     ParticleBurstSystem particleBurstSystem;
     ScoreSystem scoreSystem{hudService};
     BallMovementSystem ballMovementSystem{tileSpawnSystem, scoreSystem};
+    AutoMoveSystem autoMoveSystem{tileSpawnSystem};
     CrystalSpawnSystem crystalSpawnSystem{tileSpawnSystem, particleBurstSystem, scoreSystem};
     CameraFollowSystem cameraFollowSystem;
     ShadowSystem shadowSystem;
