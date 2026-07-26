@@ -5,11 +5,12 @@
 #include "Ecs/Components/FogComponent.h"
 #include "Ecs/Components/LightComponent.h"
 #include "Ecs/Components/MaterialComponent.h"
+#include "Ecs/Components/MeshComponent.h"
 #include "Ecs/Components/ShaderComponent.h"
 #include "Ecs/Components/TransformComponent.h"
 #include "Ecs/Core/EcsWorld.h"
 #include "Engine/Engine.h"
-#include "Resource/EntityFactory.h"
+#include "Resource/MeshFactory.h"
 
 void EnvironmentService::Init(ZigZagContext& context)
 {
@@ -39,17 +40,24 @@ void EnvironmentService::Init(ZigZagContext& context)
 
     constexpr float platformHeight = 0.6f;
 
-    const auto platformEntity = EntityFactory::CreateModelEntity(world, renderEngine, "Assets/Models/cube.obj", context.litShader);
+    if (!platformVao)
+        platformVao = MeshFactory::CreateCube(renderEngine, platformIndexCount, 1.0f);
 
-    auto& transform = world.GetComponent<TransformComponent>(platformEntity);
+    const auto platformEntity = world.CreateEntity();
+
+    auto& transform = world.AddComponent<TransformComponent>(platformEntity);
     transform.position = {0.0f, context.platformTopY - platformHeight * 0.5f, 0.0f};
     transform.scale = {context.platformHalfSize * 2.0f, platformHeight, context.platformHalfSize * 2.0f};
 
-    auto& material = world.GetComponent<MaterialComponent>(platformEntity);
-    material.diffuseTexture = nullptr;
+    auto& mesh = world.AddComponent<MeshComponent>(platformEntity);
+    mesh.vao = platformVao;
+    mesh.indexCount = platformIndexCount;
+
+    auto& material = world.AddComponent<MaterialComponent>(platformEntity);
     material.diffuseColor = context.zigZagColor;
 
-    auto& shaderComp = world.GetComponent<ShaderComponent>(platformEntity);
+    auto& shaderComp = world.AddComponent<ShaderComponent>(platformEntity);
+    shaderComp.shader = context.litShader;
     shaderComp.shaderType = ShaderRenderType::Lit;
 
     context.allEntities.push_back(platformEntity);

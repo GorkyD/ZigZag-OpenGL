@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Ecs/Core/Entity.h"
+#include "Extension/Extension.h"
 #include <string>
 
 struct ZigZagContext;
@@ -25,6 +26,11 @@ private:
     Entity bestScoreTextEntity = 0;
     Entity hintTextEntity = 0;
     Entity scoreTextEntity = 0;
+
+    FontPtr titleFont;
+    FontPtr bestScoreFont;
+    FontPtr hintFont;
+    FontPtr scoreFont;
 
     static constexpr float hintBaseY = 24.0f;
 };

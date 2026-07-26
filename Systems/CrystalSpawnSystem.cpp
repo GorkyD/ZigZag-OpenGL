@@ -30,6 +30,13 @@ void CrystalSpawnSystem::Reset(ZigZagContext& context)
 void CrystalSpawnSystem::Init(ZigZagContext& context)
 {
     Reset(context);
+
+    if (!crystalVao)
+        crystalVao = MeshFactory::CreateGem(context.engine->GetRenderEngine(), crystalIndexCount, 6, context.crystalRadius, context.crystalRadius * 0.9f, context.crystalRadius * 1.8f);
+
+    constexpr size_t poolReserve = 24;
+    while (freeCrystalEntities.size() < poolReserve)
+        freeCrystalEntities.push_back(CreateCrystalEntity(context));
 }
 
 Entity CrystalSpawnSystem::AcquireCrystalEntity(ZigZagContext& context)
@@ -41,19 +48,21 @@ Entity CrystalSpawnSystem::AcquireCrystalEntity(ZigZagContext& context)
         return entity;
     }
 
-    auto& world = context.engine->GetWorld();
-    auto* renderEngine = context.engine->GetRenderEngine();
+    return CreateCrystalEntity(context);
+}
 
-    unsigned int indexCount = 0;
-    const auto vao = MeshFactory::CreateGem(renderEngine, indexCount, 6, context.crystalRadius, context.crystalRadius * 0.9f, context.crystalRadius * 1.8f);
+Entity CrystalSpawnSystem::CreateCrystalEntity(ZigZagContext& context)
+{
+    auto& world = context.engine->GetWorld();
 
     const Entity entity = world.CreateEntity();
 
-    world.AddComponent<TransformComponent>(entity);
+    auto& transform = world.AddComponent<TransformComponent>(entity);
+    transform.scale = {0.0f, 0.0f, 0.0f};
 
     auto& mesh = world.AddComponent<MeshComponent>(entity);
-    mesh.vao = vao;
-    mesh.indexCount = indexCount;
+    mesh.vao = crystalVao;
+    mesh.indexCount = crystalIndexCount;
 
     auto& material = world.AddComponent<MaterialComponent>(entity);
     material.diffuseColor = context.crystalColor;

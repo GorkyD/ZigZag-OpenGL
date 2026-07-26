@@ -18,10 +18,9 @@ void ShadowSystem::Init(ZigZagContext& context)
     Reset(context);
 
     auto& world = context.engine->GetWorld();
-    auto* renderEngine = context.engine->GetRenderEngine();
 
-    unsigned int indexCount = 0;
-    const auto vao = MeshFactory::CreateDisc(renderEngine, indexCount, 20, context.ballRadius * 1.2f);
+    if (!shadowVao)
+        shadowVao = MeshFactory::CreateDisc(context.engine->GetRenderEngine(), shadowIndexCount, 20, context.ballRadius * 1.2f);
 
     context.ballShadowEntity = world.CreateEntity();
 
@@ -29,8 +28,8 @@ void ShadowSystem::Init(ZigZagContext& context)
     transform.position = {0.0f, context.platformTopY + 0.02f, 0.0f};
 
     auto& mesh = world.AddComponent<MeshComponent>(context.ballShadowEntity);
-    mesh.vao = vao;
-    mesh.indexCount = indexCount;
+    mesh.vao = shadowVao;
+    mesh.indexCount = shadowIndexCount;
 
     auto& material = world.AddComponent<MaterialComponent>(context.ballShadowEntity);
     material.diffuseColor = {0.0f, 0.0f, 0.0f, 0.35f};

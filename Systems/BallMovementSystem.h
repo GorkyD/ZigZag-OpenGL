@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Extension/Extension.h"
+
 class TileSpawnSystem;
 class ScoreSystem;
 struct ZigZagContext;
@@ -23,6 +25,9 @@ public:
 private:
     TileSpawnSystem& tileSpawnSystem;
     ScoreSystem& scoreSystem;
+
+    VertexArrayObjectPtr ballVao;
+    unsigned int ballIndexCount = 0;
 
     bool spaceWasPressed = false;
     bool fellOff = false;

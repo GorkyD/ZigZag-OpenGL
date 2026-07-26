@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Ecs/Core/Entity.h"
+#include "Extension/Extension.h"
 #include "Math/Vector3.h"
 #include <cstddef>
 #include <cstdint>
@@ -32,6 +33,7 @@ private:
     };
 
     Entity AcquireCrystalEntity(ZigZagContext& context);
+    Entity CreateCrystalEntity(ZigZagContext& context);
     void CollectCrystal(ZigZagContext& context, size_t slotIndex);
 
     TileSpawnSystem& tileSpawnSystem;
@@ -40,6 +42,9 @@ private:
 
     std::vector<CrystalSlot> activeCrystals;
     std::vector<Entity> freeCrystalEntities;
+
+    VertexArrayObjectPtr crystalVao;
+    unsigned int crystalIndexCount = 0;
 
     float spinAngle = 0.0f;
     float spinSpeed = 3.0f;

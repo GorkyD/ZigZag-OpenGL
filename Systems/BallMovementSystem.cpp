@@ -31,10 +31,9 @@ void BallMovementSystem::Init(ZigZagContext& context)
     spaceWasPressed = context.engine->GetInputSystem()->IsKeyDown(Key::Space);
 
     auto& world = context.engine->GetWorld();
-    auto* renderEngine = context.engine->GetRenderEngine();
 
-    unsigned int indexCount = 0;
-    const auto vao = MeshFactory::CreateSphere(renderEngine, indexCount, 12, 18, context.ballRadius);
+    if (!ballVao)
+        ballVao = MeshFactory::CreateSphere(context.engine->GetRenderEngine(), ballIndexCount, 12, 18, context.ballRadius);
 
     context.ballEntity = world.CreateEntity();
 
@@ -42,8 +41,8 @@ void BallMovementSystem::Init(ZigZagContext& context)
     transform.position = {0.0f, context.platformTopY + context.ballRadius, 0.0f};
 
     auto& mesh = world.AddComponent<MeshComponent>(context.ballEntity);
-    mesh.vao = vao;
-    mesh.indexCount = indexCount;
+    mesh.vao = ballVao;
+    mesh.indexCount = ballIndexCount;
 
     auto& material = world.AddComponent<MaterialComponent>(context.ballEntity);
     material.diffuseColor = {0.65f, 0.65f, 0.68f, 1.0f};

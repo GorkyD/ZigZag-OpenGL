@@ -25,7 +25,8 @@ void HudService::Init(ZigZagContext& context)
     auto& world = context.engine->GetWorld();
     const Rect screen = context.engine->GetWindow()->GetInnerSize();
 
-    auto titleFont = Font::LoadFromFile("Assets/Fonts/JetBrainsMono-Regular.ttf", 64.0f);
+    if (!titleFont)
+        titleFont = Font::LoadFromFile("Assets/Fonts/JetBrainsMono-Regular.ttf", 64.0f);
     if (titleFont)
     {
         gameOverTextEntity = world.CreateEntity();
@@ -42,7 +43,8 @@ void HudService::Init(ZigZagContext& context)
         context.allEntities.push_back(gameOverTextEntity);
     }
 
-    auto bestScoreFont = Font::LoadFromFile("Assets/Fonts/JetBrainsMono-Regular.ttf", 30.0f);
+    if (!bestScoreFont)
+        bestScoreFont = Font::LoadFromFile("Assets/Fonts/JetBrainsMono-Regular.ttf", 30.0f);
     if (bestScoreFont)
     {
         bestScoreTextEntity = world.CreateEntity();
@@ -59,7 +61,8 @@ void HudService::Init(ZigZagContext& context)
         context.allEntities.push_back(bestScoreTextEntity);
     }
 
-    auto hintFont = Font::LoadFromFile("Assets/Fonts/JetBrainsMono-Regular.ttf", 28.0f);
+    if (!hintFont)
+        hintFont = Font::LoadFromFile("Assets/Fonts/JetBrainsMono-Regular.ttf", 28.0f);
     if (hintFont)
     {
         hintTextEntity = world.CreateEntity();
@@ -75,7 +78,8 @@ void HudService::Init(ZigZagContext& context)
         context.allEntities.push_back(hintTextEntity);
     }
 
-    auto scoreFont = Font::LoadFromFile("Assets/Fonts/JetBrainsMono-Regular.ttf", 40.0f);
+    if (!scoreFont)
+        scoreFont = Font::LoadFromFile("Assets/Fonts/JetBrainsMono-Regular.ttf", 40.0f);
     if (scoreFont)
     {
         scoreTextEntity = world.CreateEntity();

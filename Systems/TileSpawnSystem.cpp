@@ -5,11 +5,12 @@
 
 #include "Context/ZigZagContext.h"
 #include "Ecs/Components/MaterialComponent.h"
+#include "Ecs/Components/MeshComponent.h"
 #include "Ecs/Components/ShaderComponent.h"
 #include "Ecs/Components/TransformComponent.h"
 #include "Ecs/Core/EcsWorld.h"
 #include "Engine/Engine.h"
-#include "Resource/EntityFactory.h"
+#include "Resource/MeshFactory.h"
 
 void TileSpawnSystem::Reset(ZigZagContext& context)
 {
@@ -26,7 +27,15 @@ void TileSpawnSystem::Init(ZigZagContext& context)
     Reset(context);
     pathCursor = {0.0f, 0.0f, context.platformHalfSize - context.tileSize * 0.5f};
 
+    if (!tileVao)
+        tileVao = MeshFactory::CreateCube(context.engine->GetRenderEngine(), tileIndexCount, 1.0f);
+
     constexpr size_t initialLookAhead = 20;
+    constexpr size_t poolReserve = 48;
+
+    while (freeTileEntities.size() < poolReserve)
+        freeTileEntities.push_back(CreateTileEntity(context));
+
     while (pathTiles.size() < initialLookAhead)
         GenerateSegment(context);
 }
@@ -50,16 +59,27 @@ Entity TileSpawnSystem::AcquireTileEntity(ZigZagContext& context)
         return entity;
     }
 
+    return CreateTileEntity(context);
+}
+
+Entity TileSpawnSystem::CreateTileEntity(ZigZagContext& context)
+{
     auto& world = context.engine->GetWorld();
-    auto* renderEngine = context.engine->GetRenderEngine();
 
-    const auto entity = EntityFactory::CreateModelEntity(world, renderEngine, "Assets/Models/cube.obj", context.litShader);
+    const Entity entity = world.CreateEntity();
 
-    auto& material = world.GetComponent<MaterialComponent>(entity);
-    material.diffuseTexture = nullptr;
+    auto& transform = world.AddComponent<TransformComponent>(entity);
+    transform.scale = {0.0f, 0.0f, 0.0f};
+
+    auto& mesh = world.AddComponent<MeshComponent>(entity);
+    mesh.vao = tileVao;
+    mesh.indexCount = tileIndexCount;
+
+    auto& material = world.AddComponent<MaterialComponent>(entity);
     material.diffuseColor = context.zigZagColor;
 
-    auto& shaderComp = world.GetComponent<ShaderComponent>(entity);
+    auto& shaderComp = world.AddComponent<ShaderComponent>(entity);
+    shaderComp.shader = context.litShader;
     shaderComp.shaderType = ShaderRenderType::Lit;
 
     context.allEntities.push_back(entity);

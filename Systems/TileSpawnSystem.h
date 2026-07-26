@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Ecs/Core/Entity.h"
+#include "Extension/Extension.h"
 #include "Math/Vector3.h"
 #include <cstddef>
 #include <cstdint>
@@ -40,6 +41,7 @@ private:
     void GenerateSegment(ZigZagContext& context);
     void RetireFrontTile(ZigZagContext& context);
     Entity AcquireTileEntity(ZigZagContext& context);
+    Entity CreateTileEntity(ZigZagContext& context);
 
     std::deque<PathTile> pathTiles;
     std::vector<FallingTile> fallingTiles;
@@ -47,6 +49,9 @@ private:
 
     std::function<void(uint64_t, const Vector3&)> onTileCreated;
     std::function<void(uint64_t)> onTileRetired;
+
+    VertexArrayObjectPtr tileVao;
+    unsigned int tileIndexCount = 0;
 
     Vector3 pathCursor = {0.0f, 0.0f, 0.0f};
     uint64_t nextTileId = 1;
