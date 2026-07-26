@@ -1,0 +1,20 @@
+# Build output (if this folder is ever built/tested standalone)
+/build
+/Build
+x64/
+Debug/
+Release/
+
+# Compiled objects / debug info
+*.obj
+*.o
+*.pdb
+*.ilk
+
+# IDE / project files
+/.vs
+/.idea
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
+*.sln
