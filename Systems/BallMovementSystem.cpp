@@ -45,7 +45,8 @@ void BallMovementSystem::Init(ZigZagContext& context)
     mesh.indexCount = ballIndexCount;
 
     auto& material = world.AddComponent<MaterialComponent>(context.ballEntity);
-    material.diffuseColor = {0.65f, 0.65f, 0.68f, 1.0f};
+    material.diffuseColor = {0.02f, 0.02f, 0.02f, 1.0f};
+    material.roughness = 0.25f;
 
     auto& shaderComp = world.AddComponent<ShaderComponent>(context.ballEntity);
     shaderComp.shader = context.litShader;
@@ -97,6 +98,18 @@ void BallMovementSystem::Update(ZigZagContext& context, float deltaTime)
     const float travelDistance = ball.speed * deltaTime;
     transform.position += ball.direction * travelDistance;
     scoreSystem.AddDistanceScore(context, travelDistance);
+
+    if (context.ballRadius > 0.0f)
+    {
+        const Vector3 rollAxis = Vector3::Cross({0.0f, 1.0f, 0.0f}, ball.direction);
+        const float axisLen = std::sqrt(Vector3::Dot(rollAxis, rollAxis));
+        if (axisLen > 1e-5f)
+        {
+            const float rollAngle = travelDistance / context.ballRadius;
+            const Matrix4 deltaRotation = Matrix4::FromAxisAngle(rollAxis * (1.0f / axisLen), rollAngle);
+            transform.rotation *= deltaRotation;
+        }
+    }
 
     size_t tileIndex = SIZE_MAX;
     if (!tileSpawnSystem.IsOverFootprint(context, transform.position, &tileIndex))

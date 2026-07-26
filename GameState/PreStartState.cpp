@@ -24,8 +24,8 @@ void PreStartState::OnEnter(ZigZagContext& context)
 {
     hudService.ShowStartHint(context);
     bounceTime = 0.0f;
-    spaceWasPressed = false;
-    rWasPressed = false;
+    spaceWasPressed = context.engine->GetInputSystem()->IsKeyDown(Key::Space);
+    rWasPressed = context.engine->GetInputSystem()->IsKeyDown(Key::R);
 }
 
 void PreStartState::OnUpdate(ZigZagContext& context, float deltaTime)
