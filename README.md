@@ -1,6 +1,10 @@
 # ZigZag
 
-A ZigZag-style game module built on top of [OpenGLEngine](https://github.com/) (a custom ECS-based OpenGL engine). This folder is self-contained and meant to be dropped into any `OpenGLEngine` checkout under `OpenGLEngine/Game/`.
+![Demo](docs/demo.gif)
+
+A ZigZag-style game module built on top of [OpenGLEngine](https://github.com/GorkyD/OpenGLEngine) (a custom ECS-based OpenGL engine). This folder is self-contained and meant to be dropped into any `OpenGLEngine` checkout under `OpenGLEngine/Game/`.
+
+This project is a port/copy of my old Unity test project — [GorkyD/ZigZag](https://github.com/GorkyD/ZigZag) — reimplemented from scratch on top of OpenGLEngine's ECS.
 
 ## Gameplay
 
@@ -20,9 +24,9 @@ A ZigZag-style game module built on top of [OpenGLEngine](https://github.com/) (
 
 ## Integrating into an OpenGLEngine checkout
 
-1. Copy or clone this folder into `OpenGLEngine/Game/ZigZag` of an `OpenGLEngine` checkout.
-2. In the root `CMakeLists.txt`, add every `.cpp` file from this folder to `GAME_SOURCES`, and add `OpenGLEngine/Game/ZigZag` to `target_include_directories`.
-3. Point `OpenGLEngine/Game/main.cpp` at `ZigZagScene` (`engine.LoadScene(std::make_unique<ZigZagScene>())` or equivalent).
+1. Copy or clone this folder into `OpenGLEngine/Game/` of an [OpenGLEngine](https://github.com/GorkyD/OpenGLEngine) checkout (e.g. `OpenGLEngine/Game/ZigZag OpenGL`).
+2. The root `CMakeLists.txt` auto-discovers every `.cpp` file and subfolder under `OpenGLEngine/Game/`, so no manual CMake edits are needed.
+3. Point `OpenGLEngine/Game/main.cpp` at `ZigZagScene` (`#include "ZigZagScene.h"` and `engine.LoadScene(std::make_unique<ZigZagScene>())` or equivalent).
 4. Build and run as usual (see the engine's own `README.md` for toolchain setup).
 
 ## Save data
