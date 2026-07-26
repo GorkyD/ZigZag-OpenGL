@@ -63,6 +63,7 @@ Entity CrystalSpawnSystem::CreateCrystalEntity(ZigZagContext& context)
     auto& mesh = world.AddComponent<MeshComponent>(entity);
     mesh.vao = crystalVao;
     mesh.indexCount = crystalIndexCount;
+    mesh.visible = false;
 
     auto& material = world.AddComponent<MaterialComponent>(entity);
     material.diffuseColor = context.crystalColor;
@@ -90,6 +91,7 @@ void CrystalSpawnSystem::NotifyTileCreated(ZigZagContext& context, uint64_t tile
     transform.position = {center.x, context.platformTopY + context.crystalFloatHeight, center.z};
     transform.scale = {1.0f, 1.0f, 1.0f};
     transform.rotation.SetIdentity();
+    world.GetComponent<MeshComponent>(entity).visible = true;
 
     activeCrystals.push_back({tileId, entity, transform.position});
 }
@@ -104,6 +106,7 @@ void CrystalSpawnSystem::NotifyTileRetired(ZigZagContext& context, uint64_t tile
         auto& world = context.engine->GetWorld();
         auto& transform = world.GetComponent<TransformComponent>(activeCrystals[i].entity);
         transform.scale = {0.0f, 0.0f, 0.0f};
+        world.GetComponent<MeshComponent>(activeCrystals[i].entity).visible = false;
         freeCrystalEntities.push_back(activeCrystals[i].entity);
 
         activeCrystals[i] = activeCrystals.back();
@@ -121,6 +124,7 @@ void CrystalSpawnSystem::CollectCrystal(ZigZagContext& context, size_t slotIndex
 
     auto& transform = world.GetComponent<TransformComponent>(slot.entity);
     transform.scale = {0.0f, 0.0f, 0.0f};
+    world.GetComponent<MeshComponent>(slot.entity).visible = false;
     freeCrystalEntities.push_back(slot.entity);
 
     activeCrystals[slotIndex] = activeCrystals.back();

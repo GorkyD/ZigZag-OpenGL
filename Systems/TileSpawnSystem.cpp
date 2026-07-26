@@ -74,6 +74,7 @@ Entity TileSpawnSystem::CreateTileEntity(ZigZagContext& context)
     auto& mesh = world.AddComponent<MeshComponent>(entity);
     mesh.vao = tileVao;
     mesh.indexCount = tileIndexCount;
+    mesh.visible = false;
 
     auto& material = world.AddComponent<MaterialComponent>(entity);
     material.diffuseColor = context.zigZagColor;
@@ -104,6 +105,7 @@ void TileSpawnSystem::GenerateSegment(ZigZagContext& context)
         auto& transform = world.GetComponent<TransformComponent>(entity);
         transform.position = {pathCursor.x, context.platformTopY - context.tileHeight * 0.5f, pathCursor.z};
         transform.scale = {context.tileSize, context.tileHeight, context.tileSize};
+        world.GetComponent<MeshComponent>(entity).visible = true;
 
         const uint64_t tileId = nextTileId++;
         pathTiles.push_back({tileId, entity, pathCursor});
@@ -181,6 +183,7 @@ void TileSpawnSystem::Update(ZigZagContext& context, float deltaTime)
         if (transform.position.y < context.platformTopY - 8.0f)
         {
             transform.scale = {0.0f, 0.0f, 0.0f};
+            world.GetComponent<MeshComponent>(falling.entity).visible = false;
             freeTileEntities.push_back(falling.entity);
 
             fallingTiles[i] = fallingTiles.back();
