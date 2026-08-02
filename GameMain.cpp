@@ -8,7 +8,8 @@ int main()
     try
     {
         Engine engine(EngineMode::Play);
-        engine.LoadScene(std::make_unique<ZigZagScene>());
+        engine.RegisterScene("ZigZag", [] { return std::make_unique<ZigZagScene>(); }, OPENGLENGINE_GAME_NAME, OPENGLENGINE_GAME_ASSETS);
+        engine.LoadScene(std::make_unique<ZigZagScene>(), "ZigZag");
         engine.Run();
     }
     catch (const std::exception& ex)
