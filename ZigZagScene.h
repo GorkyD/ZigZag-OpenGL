@@ -11,7 +11,6 @@
 #include "Systems/CrystalSpawnSystem.h"
 #include "Systems/ParticleBurstSystem.h"
 #include "Systems/ScoreSystem.h"
-#include "Systems/ShadowSystem.h"
 #include "Systems/TileSpawnSystem.h"
 
 class ZigZagScene : public IScene
@@ -41,5 +40,4 @@ private:
     AutoMoveSystem autoMoveSystem{tileSpawnSystem};
     CrystalSpawnSystem crystalSpawnSystem{tileSpawnSystem, particleBurstSystem, scoreSystem};
     CameraFollowSystem cameraFollowSystem;
-    ShadowSystem shadowSystem;
 };

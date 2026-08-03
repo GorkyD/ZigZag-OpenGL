@@ -7,7 +7,6 @@ class BallMovementSystem;
 class TileSpawnSystem;
 class CrystalSpawnSystem;
 class ParticleBurstSystem;
-class ShadowSystem;
 class CameraFollowSystem;
 class ScoreSystem;
 class HudService;
@@ -16,7 +15,7 @@ class AutoMoveSystem;
 class PlayingState : public IGameState
 {
 public:
-    PlayingState(GameStateMachine& stateMachine, BallMovementSystem& ballMovementSystem, TileSpawnSystem& tileSpawnSystem, CrystalSpawnSystem& crystalSpawnSystem, ParticleBurstSystem& particleBurstSystem, ShadowSystem& shadowSystem,
+    PlayingState(GameStateMachine& stateMachine, BallMovementSystem& ballMovementSystem, TileSpawnSystem& tileSpawnSystem, CrystalSpawnSystem& crystalSpawnSystem, ParticleBurstSystem& particleBurstSystem,
                  CameraFollowSystem& cameraFollowSystem, ScoreSystem& scoreSystem, HudService& hudService, AutoMoveSystem& autoMoveSystem);
 
     void OnEnter(ZigZagContext& context) override;
@@ -28,7 +27,6 @@ private:
     TileSpawnSystem& tileSpawnSystem;
     CrystalSpawnSystem& crystalSpawnSystem;
     ParticleBurstSystem& particleBurstSystem;
-    ShadowSystem& shadowSystem;
     CameraFollowSystem& cameraFollowSystem;
     ScoreSystem& scoreSystem;
     HudService& hudService;

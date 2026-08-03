@@ -2,6 +2,9 @@
 
 #include <memory>
 
+#include "Ecs/Components/AmbientLightComponent.h"
+#include "Ecs/Components/FogComponent.h"
+#include "Ecs/Components/LightComponent.h"
 #include "Ecs/Core/EcsWorld.h"
 #include "Engine/Engine.h"
 #include "GameState/PreStartState.h"
@@ -26,12 +29,11 @@ void ZigZagScene::SetupGame(Engine& engine)
     crystalSpawnSystem.Init(context);
     tileSpawnSystem.Init(context);
     particleBurstSystem.Init(context);
-    shadowSystem.Init(context);
     cameraFollowSystem.Init(context);
     scoreSystem.Init(context);
     hudService.Init(context);
 
-    stateMachine.ChangeState(context, std::make_unique<PreStartState>(stateMachine, hudService, ballMovementSystem, tileSpawnSystem, crystalSpawnSystem, particleBurstSystem, shadowSystem, cameraFollowSystem, scoreSystem, autoMoveSystem));
+    stateMachine.ChangeState(context, std::make_unique<PreStartState>(stateMachine, hudService, ballMovementSystem, tileSpawnSystem, crystalSpawnSystem, particleBurstSystem, cameraFollowSystem, scoreSystem, autoMoveSystem));
 }
 
 void ZigZagScene::OnUpdate(Engine& engine, float deltaTime)
@@ -53,6 +55,10 @@ void ZigZagScene::RestartGame(Engine& engine)
         world.DestroyEntity(entity);
     world.ProcessDeferred();
     context.allEntities.clear();
+
+    world.GetPool<LightComponent>().Clear();
+    world.GetPool<AmbientLightComponent>().Clear();
+    world.GetPool<FogComponent>().Clear();
 
     SetupGame(engine);
 }

@@ -11,12 +11,11 @@
 #include "Systems/CrystalSpawnSystem.h"
 #include "Systems/ParticleBurstSystem.h"
 #include "Systems/ScoreSystem.h"
-#include "Systems/ShadowSystem.h"
 #include "Systems/TileSpawnSystem.h"
 
 PlayingState::PlayingState(GameStateMachine& stateMachine, BallMovementSystem& ballMovementSystem, TileSpawnSystem& tileSpawnSystem, CrystalSpawnSystem& crystalSpawnSystem, ParticleBurstSystem& particleBurstSystem,
-                           ShadowSystem& shadowSystem, CameraFollowSystem& cameraFollowSystem, ScoreSystem& scoreSystem, HudService& hudService, AutoMoveSystem& autoMoveSystem)
-    : stateMachine(stateMachine), ballMovementSystem(ballMovementSystem), tileSpawnSystem(tileSpawnSystem), crystalSpawnSystem(crystalSpawnSystem), particleBurstSystem(particleBurstSystem), shadowSystem(shadowSystem),
+                           CameraFollowSystem& cameraFollowSystem, ScoreSystem& scoreSystem, HudService& hudService, AutoMoveSystem& autoMoveSystem)
+    : stateMachine(stateMachine), ballMovementSystem(ballMovementSystem), tileSpawnSystem(tileSpawnSystem), crystalSpawnSystem(crystalSpawnSystem), particleBurstSystem(particleBurstSystem),
       cameraFollowSystem(cameraFollowSystem), scoreSystem(scoreSystem), hudService(hudService), autoMoveSystem(autoMoveSystem)
 {
 }
@@ -33,7 +32,6 @@ void PlayingState::OnUpdate(ZigZagContext& context, float deltaTime)
     tileSpawnSystem.Update(context, deltaTime);
     crystalSpawnSystem.Update(context, deltaTime);
     particleBurstSystem.Update(context, deltaTime);
-    shadowSystem.Update(context, deltaTime);
     cameraFollowSystem.Update(context, deltaTime);
     scoreSystem.Update(context, deltaTime);
 

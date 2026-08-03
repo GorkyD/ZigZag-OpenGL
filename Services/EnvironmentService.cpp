@@ -29,7 +29,22 @@ void EnvironmentService::Init(ZigZagContext& context)
     sun.color = {1.0f, 0.98f, 0.9f};
     sun.direction = {0.35f, 1.0f, -0.55f};
     sun.intensity = 1.8f;
+    sun.castShadows = true;
+    sun.shadowOrthoSize = 14.0f;
+    sun.shadowDistance = 30.0f;
+    sun.shadowFocusDistance = 14.0f;
+    sun.shadowAmbientOcclusion = 0.75f;
+    sun.shadowBias = 0.01f;
+    sun.shadowNormalBias = 0.1f;
     context.allEntities.push_back(sunEntity);
+
+    const auto fillEntity = world.CreateEntity();
+    auto& fill = world.AddComponent<LightComponent>(fillEntity);
+    fill.type = LightType::Directional;
+    fill.color = {0.75f, 0.85f, 1.0f};
+    fill.direction = {-0.35f, 0.6f, 0.55f};
+    fill.intensity = 0.5f;
+    context.allEntities.push_back(fillEntity);
 
     const auto fogEntity = world.CreateEntity();
     auto& fog = world.AddComponent<FogComponent>(fogEntity);

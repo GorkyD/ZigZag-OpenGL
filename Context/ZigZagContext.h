@@ -20,7 +20,6 @@ struct ZigZagContext
     std::vector<Entity> allEntities;
 
     Entity ballEntity = 0;
-    Entity ballShadowEntity = 0;
     Entity cameraEntity = 0;
 
     float score = 0.0f;
